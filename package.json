@@ -1,0 +1,20 @@
+{
+  "name": "mern",
+  "version": "1.0.0",
+  "description": "fullstack project",
+  "license": "ISC",
+  "author": "Syed Abid Ahmed",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "colors": "^1.4.0",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "mongoose": "^8.17.1",
+    "nodemon": "^3.1.10"
+  }
+}
