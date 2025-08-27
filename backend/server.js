@@ -1,7 +1,12 @@
 const express = require('express');
-const app = express();
+const dotenv = require('dotenv').config()
+const colors = require('colors')
+const connectDb = require('./config/db')
 const urlRoutes = require('./routes/urlRoutes');
 const { errorHandler } = require('./middleware/errorMiddleware')
+
+connectDb();
+const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
