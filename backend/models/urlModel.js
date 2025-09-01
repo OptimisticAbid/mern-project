@@ -1,14 +1,19 @@
 const mongoose = require('mongoose');
 
-const urlSchema = new mongoose.Schema({
-  longUrl: {
-    type: String,
-    required: true,
+const urlSchema = new mongoose.Schema(
+    {
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true ,
+    }, 
+    longUrl: {
+        type: String,
+        required: true,
   },
-  shortUrl: {
-    type: String,
-    required: true,
-    unique: true,
+    shortUrl: {
+        type: String,
+        required: true,
+        unique: true,
   }
 });
 

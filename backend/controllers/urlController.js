@@ -1,17 +1,20 @@
 const asyncHandler = require('express-async-handler')
+
 const Url = require('../models/urlModel')
+const User = require('../models/userModel')
+
 const { nanoid } = require("nanoid"); 
 const baseUrl = process.env.BASE_URL;
 
 const getUrl = asyncHandler(async (req,res) => {
-    const urls = await Url.find()
-    res.json(urls);
+    const urls = await Url.find({user: req.user.id})
+    res.status(200).json(urls);
 })
 
 const postUrl = asyncHandler(async (req, res) => {
-  const url = req.body?.url;
+  const {longUrl} = req.body;
 
-  if (!url) {
+  if (!longUrl) {
     res.status(400);
     throw new Error("Please add a URL");
   }
@@ -28,6 +31,7 @@ const postUrl = asyncHandler(async (req, res) => {
     const shortCode = nanoid(7);
 
     const newUrl = await Url.create({
+      user: req.user.id,
       longUrl,
       shortUrl: shortCode,
     });
@@ -40,7 +44,7 @@ const postUrl = asyncHandler(async (req, res) => {
 });
 
 
-const patchUrl = asyncHandler(async (req,res) => {
+const updateUrl = asyncHandler(async (req,res) => {
     const url = await Url.findById(req.params.id)
     
     if(!url) {
@@ -48,6 +52,19 @@ const patchUrl = asyncHandler(async (req,res) => {
         throw new error('URL Not Found!')
     }
 
+    const user = await User.findById(req.user.id)
+
+    // Check for User
+    if(!user) {
+      res.status(401)
+      throw new Error('User not found')
+    }
+
+    // Make sure the loggedin user ,atches the url user
+    if(url.user.toString() != user.id) {
+      res.status(401)
+      throw new Error('User not authorized')
+    }
     const updatedUrl = await Url.findByIdAndUpdate(req.params.id,req.body,{
         new: true, 
     })
@@ -62,6 +79,19 @@ const deleteUrl = asyncHandler(async (req,res) => {
         throw new error('URL Not Found!')
     }
 
+     const user = await User.findById(req.user.id)
+
+    // Check for User
+    if(!user) {
+      res.status(401)
+      throw new Error('User not found')
+    }
+
+    // Make sure the loggedin user ,atches the url user
+    if(url.user.toString() != user.id) {
+      res.status(401)
+      throw new Error('User not authorized')
+    }
     await url.deleteOne()
     res.status(200).json({id: req.params.id});
 })
@@ -69,6 +99,6 @@ const deleteUrl = asyncHandler(async (req,res) => {
 module.exports = {
     getUrl ,
     postUrl,
-    patchUrl,
+    updateUrl,
     deleteUrl
 }

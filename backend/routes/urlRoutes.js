@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const {getUrl,postUrl,patchUrl,deleteUrl} =require('../controllers/urlController');
+const {getUrl,postUrl,updateUrl,deleteUrl} =require('../controllers/urlController');
+const {protect} = require('../middleware/authMiddleware')
 
-router.route('/').get(getUrl).post(postUrl);
+router.route('/').get(protect,getUrl).post(protect,postUrl);
 
-router.patch('/:id',patchUrl)
+router.patch('/:id',protect,updateUrl)
 
-router.delete('/:id',deleteUrl)
+router.delete('/:id',protect,deleteUrl)
 
 module.exports = router ;
