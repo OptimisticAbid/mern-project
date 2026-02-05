@@ -1,21 +1,22 @@
-const express = require('express');
-const dotenv = require('dotenv').config()
-const colors = require('colors')
-const connectDb = require('./config/db')
-const urlRoutes = require('./routes/urlRoutes');
-const userRoutes = require('./routes/userRoutes')
-const { errorHandler } = require('./middleware/errorMiddleware')
+import "dotenv/config";
+import app from "./app.js";
+import { connectDb } from "./db/index.js";
 
-connectDb();
-const app = express();
-
-app.use(express.json());
-app.use(express.urlencoded({extended: false}));
-app.use('/api/urls', urlRoutes);
-app.use('/api/users', userRoutes);
-app.use(errorHandler)
+const PORT = process.env.PORT || 8000;
+// console.log(process.env.DB_NAME );
 
 
-app.listen(5000,() => {
-    console.log("listening on Port 5000");
-})
+async function startServer() {
+  try {
+    await connectDb();
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  } catch (err) {
+    console.error("Failed to start server", err);
+    process.exit(1);
+  }
+}
+
+startServer();
+

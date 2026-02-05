@@ -1,12 +1,15 @@
-const express = require('express');
-const router = express.Router();
-const {getUrl,postUrl,updateUrl,deleteUrl} =require('../controllers/urlController');
-const {protect} = require('../middleware/authMiddleware')
+import express from 'express'
+import { getUrl, postUrl, updateUrl, deleteUrl } from '../controllers/urlController.js'
+import { protect } from '../middleware/authMiddleware.js'
 
-router.route('/').get(protect,getUrl).post(protect,postUrl);
+const router = express.Router()
 
-router.patch('/:id',protect,updateUrl)
+router.route('/').get(protect, getUrl)
 
-router.delete('/:id',protect,deleteUrl)
+router.route('/').post(protect, postUrl)
 
-module.exports = router ;
+router.patch('/:id', protect, updateUrl)
+
+router.delete('/:id', protect, deleteUrl)
+
+export default router
