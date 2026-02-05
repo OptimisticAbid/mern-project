@@ -1,24 +1,20 @@
-import mongoose from 'mongoose'
+const mongoose = require('mongoose');
 
 const urlSchema = new mongoose.Schema(
     {
-        user: {
-            type: mongoose.Schema.Types.ObjectId,
-            required: true,
-        },
-        longUrl: {
-            type: String,
-            required: true,
-        },
-        shortUrl: {
-            type: String,
-            required: true,
-            unique: true,
-        },
-    },
-    {
-        timestamps: true,
-    }
-)
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true ,
+    }, 
+    longUrl: {
+        type: String,
+        required: true,
+  },
+    shortUrl: {
+        type: String,
+        required: true,
+        unique: true,
+  }
+});
 
-export default mongoose.model('Url', urlSchema)
+module.exports = mongoose.model('Url', urlSchema);
